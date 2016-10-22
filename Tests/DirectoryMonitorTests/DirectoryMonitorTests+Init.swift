@@ -5,7 +5,7 @@ extension DirectoryMonitorTests {
 
     func testInitializer() {
         let url = URL(fileURLWithPath: DirectoryMonitorTests.directory)
-        let monitor = DirectoryMonitor(at: url) { print("Directory did change.") }
+        let monitor = DirectoryMonitor(at: url)
 
         XCTAssertNotNil(monitor)
     }

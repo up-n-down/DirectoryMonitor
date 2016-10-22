@@ -15,22 +15,18 @@ public class DirectoryMonitor {
     /// A dispatch source to monitor a file descriptor created from the directory.
     private var source: DispatchSourceProtocol?
 
-    /// A dispatch work item that handles the directory updates.
-    private let workItem: DispatchWorkItem
-
     /// URL for the directory being monitored.
     private var url: URL
 
     // MARK: Initializers
 
-    public init(at url: URL, handleWith handler: @escaping EventHandler) {
+    public init(at url: URL) {
         self.url = url
-        self.workItem = DispatchWorkItem(block: handler)
     }
 
     // MARK: Monitoring
 
-    public func startMonitoring() {
+    public func startMonitoring(_ handler: @escaping EventHandler) {
         // Listen for changes to the directory (if we are not already).
         if source == nil && fileDescriptor == -1 {
 
@@ -47,7 +43,7 @@ public class DirectoryMonitor {
             )
 
             // Define the work item to call when a file change is detected.
-            source?.setEventHandler(handler: workItem)
+            source?.setEventHandler(handler: handler)
 
             // Define a cancel handler to ensure the directory is closed when the source is cancelled.
             source?.setCancelHandler(handler: {
