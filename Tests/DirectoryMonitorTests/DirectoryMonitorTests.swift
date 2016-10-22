@@ -3,14 +3,16 @@ import XCTest
 
 class DirectoryMonitorTests: XCTestCase {
 
-    let directory = NSTemporaryDirectory().appending("io.up-n-down.directorymonitor")
+    private static let directory = NSTemporaryDirectory().appending("io.up-n-down.directorymonitor")
+    private static let file = directory.appending("/testfile.txt")
+
 
     // MARK: - Set up + Tear down
     override func setUp() {
         super.setUp()
 
         do {
-            try FileManager.default.createDirectory(atPath: directory,
+            try FileManager.default.createDirectory(atPath: DirectoryMonitorTests.directory,
                                                     withIntermediateDirectories: true,
                                                     attributes: nil)
         } catch _ {
@@ -20,7 +22,7 @@ class DirectoryMonitorTests: XCTestCase {
 
     override func tearDown() {
         do {
-            try FileManager.default.removeItem(atPath: directory)
+            try FileManager.default.removeItem(atPath: DirectoryMonitorTests.directory)
         } catch _ {
             print("Unable to remove temporary directory for tests.")
         }
@@ -31,11 +33,11 @@ class DirectoryMonitorTests: XCTestCase {
     // MARK: - Tests
 
     func testInitializer() {
-        XCTAssertNotNil(DirectoryMonitor(URL: URL(fileURLWithPath: directory)))
+        XCTAssertNotNil(DirectoryMonitor(URL: URL(fileURLWithPath: DirectoryMonitorTests.directory)))
     }
 
     func testDelegate() {
-        let url = URL(fileURLWithPath: directory)
+        let url = URL(fileURLWithPath: DirectoryMonitorTests.directory)
         let monitor = DirectoryMonitor(URL: url)
         monitor.delegate = self
         monitor.startMonitoring()
@@ -48,7 +50,7 @@ class DirectoryMonitorTests: XCTestCase {
     // MARK: - File Operations
 
     private func createFile() {
-        let success = FileManager.default.createFile(atPath: directory.appending("/testfile.txt"),
+        let success = FileManager.default.createFile(atPath: DirectoryMonitorTests.file,
                                                      contents: nil,
                                                      attributes: nil)
 
