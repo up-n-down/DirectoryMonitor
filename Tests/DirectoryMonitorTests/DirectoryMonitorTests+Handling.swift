@@ -3,7 +3,7 @@ import XCTest
 
 extension DirectoryMonitorTests {
 
-    func testHandlingNewFile() {
+    func testCreatingFile() {
         var handlingNewFile: XCTestExpectation? = expectation(description: "Event handler should be called when creating new file.")
         let url = URL(fileURLWithPath: DirectoryMonitorTests.directory)
         let monitor = DirectoryMonitor(at: url)
