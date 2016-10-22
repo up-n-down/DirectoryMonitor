@@ -43,4 +43,15 @@ class DirectoryMonitorTests: XCTestCase {
         }
     }
 
+    func editFile() {
+        let data = "Test".data(using: .utf8)
+        let success = FileManager.default.createFile(atPath: DirectoryMonitorTests.file,
+                                                     contents: data,
+                                                     attributes: nil)
+
+        if !success {
+            XCTFail("Unable to create file.")
+        }
+    }
+
 }

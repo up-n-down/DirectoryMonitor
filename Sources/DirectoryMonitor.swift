@@ -1,35 +1,31 @@
 import Foundation
 
-/// A protocol that allows delegates of `DirectoryMonitor` to respond to changes in a directory.
-protocol DirectoryMonitorDelegate: class {
-
-    func directoryMonitor(_ directoryMonitor: DirectoryMonitor, directoryDidChangeAt directory: URL)
-}
-
 class DirectoryMonitor {
+
+    typealias EventHandler = (() -> ())
 
     // MARK: Properties
 
-    /// The `DirectoryMonitor`'s delegate who is responsible for responding to `DirectoryMonitor` updates.
-    weak var delegate: DirectoryMonitorDelegate?
-
     /// A file descriptor for the monitored directory.
-    var fileDescriptor: CInt = -1
+    private var fileDescriptor: CInt = -1
 
     /// A dispatch queue used for sending file changes in the directory.
-    let queue = DispatchQueue(label: "io.up-n-down.directorymonitor")
+    private let queue = DispatchQueue(label: "io.up-n-down.directorymonitor")
 
     /// A dispatch source to monitor a file descriptor created from the directory.
-    var source: DispatchSourceProtocol?
+    private var source: DispatchSourceProtocol?
+
+    /// A dispatch work item that handles the directory updates.
+    private let workItem: DispatchWorkItem
 
     /// URL for the directory being monitored.
-    var url: URL
+    private var url: URL
 
     // MARK: Initializers
 
-    init(url: URL) {
+    init(at url: URL, handleWith handler: @escaping EventHandler) {
         self.url = url
-        NSLog("Directory Monitor @ \(url)")
+        self.workItem = DispatchWorkItem(block: handler)
     }
 
     // MARK: Monitoring
@@ -46,15 +42,12 @@ class DirectoryMonitor {
             // Define a dispatch source monitoring the directory for additions, deletions, and renamings.
             source = DispatchSource.makeFileSystemObjectSource(
                 fileDescriptor: fileDescriptor,
-                eventMask: .write,
+                eventMask: .all,
                 queue: queue
             )
 
-            // Define the block to call when a file change is detected.
-            source?.setEventHandler(handler: {
-                // Call out to the `DirectoryMonitorDelegate` so that it can react appropriately to the change.
-                self.delegate?.directoryMonitor(self, directoryDidChangeAt: self.url)
-            })
+            // Define the work item to call when a file change is detected.
+            source?.setEventHandler(handler: workItem)
 
             // Define a cancel handler to ensure the directory is closed when the source is cancelled.
             source?.setCancelHandler(handler: {

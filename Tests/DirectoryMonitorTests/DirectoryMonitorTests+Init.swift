@@ -4,7 +4,10 @@ import XCTest
 extension DirectoryMonitorTests {
 
     func testInitializer() {
-        XCTAssertNotNil(DirectoryMonitor(URL: URL(fileURLWithPath: DirectoryMonitorTests.directory)))
+        let url = URL(fileURLWithPath: DirectoryMonitorTests.directory)
+        let monitor = DirectoryMonitor(at: url) { print("Directory did change.") }
+
+        XCTAssertNotNil(monitor)
     }
 
 }
