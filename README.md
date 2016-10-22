@@ -50,6 +50,8 @@ monitor.startMonitoring {
 }
 ```
 
+You can simply stop monitoring your directory with calling `monitor.stopMonitoring()`. That's it. It's that simple to use `DirectoryMonitor`.
+
 ## Copyright
 
 All fame to Apple! This project is based on an [example code](https://developer.apple.com/library/content/samplecode/Lister/Listings/ListerKit_DirectoryMonitor_swift.html), ported to Swift 3 and slightly changed.
