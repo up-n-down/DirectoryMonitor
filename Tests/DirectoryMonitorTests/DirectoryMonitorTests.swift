@@ -6,8 +6,8 @@ class DirectoryMonitorTests: XCTestCase {
     static let directory = NSTemporaryDirectory().appending("io.up-n-down.directorymonitor")
     static let file = directory.appending("/testfile.txt")
 
-
     // MARK: - Set up + Tear down
+
     override func setUp() {
         super.setUp()
 
@@ -30,7 +30,6 @@ class DirectoryMonitorTests: XCTestCase {
         super.tearDown()
     }
 
-
     // MARK: - File Operations
 
     func createFile() {
@@ -50,7 +49,15 @@ class DirectoryMonitorTests: XCTestCase {
                                                      attributes: nil)
 
         if !success {
-            XCTFail("Unable to create file.")
+            XCTFail("Unable to edit file.")
+        }
+    }
+
+    func removeFile() {
+        do {
+            try FileManager.default.removeItem(atPath: DirectoryMonitorTests.file)
+        } catch _ {
+            XCTFail("Unable to remove file.")
         }
     }
 
