@@ -14,7 +14,7 @@ class DirectoryMonitor {
     weak var delegate: DirectoryMonitorDelegate?
 
     /// A file descriptor for the monitored directory.
-    var monitoredDirectoryFileDescriptor: CInt = -1
+    var fileDescriptor: CInt = -1
 
     /// A dispatch queue used for sending file changes in the directory.
     let directoryMonitorQueue = DispatchQueue(label: "io.up-n-down.directorymonitor")
@@ -36,15 +36,19 @@ class DirectoryMonitor {
 
     func startMonitoring() {
         // Listen for changes to the directory (if we are not already).
-        if directoryMonitorSource == nil && monitoredDirectoryFileDescriptor == -1 {
+        if directoryMonitorSource == nil && fileDescriptor == -1 {
 
             NSLog("Start monitoring \(URL) for changes.")
 
             // Open the directory referenced by URL for monitoring only.
-            monitoredDirectoryFileDescriptor = open(URL.path, O_EVTONLY)
+            fileDescriptor = open(URL.path, O_EVTONLY)
 
             // Define a dispatch source monitoring the directory for additions, deletions, and renamings.
-            directoryMonitorSource = DispatchSource.makeFileSystemObjectSource(fileDescriptor: monitoredDirectoryFileDescriptor, eventMask: .write, queue: directoryMonitorQueue)
+            directoryMonitorSource = DispatchSource.makeFileSystemObjectSource(
+                fileDescriptor: fileDescriptor,
+                eventMask: .write,
+                queue: directoryMonitorQueue
+            )
 
             // Define the block to call when a file change is detected.
             directoryMonitorSource?.setEventHandler(handler: {
@@ -54,9 +58,9 @@ class DirectoryMonitor {
 
             // Define a cancel handler to ensure the directory is closed when the source is cancelled.
             directoryMonitorSource?.setCancelHandler(handler: {
-                close(self.monitoredDirectoryFileDescriptor)
+                close(self.fileDescriptor)
 
-                self.monitoredDirectoryFileDescriptor = -1
+                self.fileDescriptor = -1
 
                 self.directoryMonitorSource = nil
             })
