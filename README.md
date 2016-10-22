@@ -9,9 +9,9 @@ DirectoryMonitor is used to monitor the contents of the provided directory by us
 
 ## Installation
 
-DirectoryMonitor supports multiple methods for installing the library in a project. You can find the latest version in the [release tab](https://github.com/up-n-down/directorymonitor/releases/latest). 
+DirectoryMonitor supports multiple methods for installing the library in a project. You can find the latest version in the [release tab](https://github.com/up-n-down/directorymonitor/releases/latest).
 
-### Installation with Swift Package Manager 
+### Installation with Swift Package Manager
 
 To integrate DirectoryMonitor into your Xcode project using [Swift Package Manager](https://swift.org/package-manager/), specify it in your `Package.swift` file:
 
@@ -34,19 +34,20 @@ To integrate DirectoryMonitor into your Xcode project using [Carthage](https://g
 github "up-n-down/DirectoryMonitor" ~> X.Y.Z
 ```
 
-Run `carthage update` to build the framework and drag the built DirectoryMonitor.framework into your Xcode project. 
+Run `carthage update` to build the framework and drag the built DirectoryMonitor.framework into your Xcode project.
 
 ## Usage
 
-Create a new `DirectoryMonitor`, specify the `URL` that should be monitored, set the `EventHandler` and start monitoring. It's that simple.
+1. Create a new `DirectoryMonitor` + specify the `URL` that should be monitored
+2. Start monitoring and provide an `EventHandler`
+3. Enjoy your directory changes 🎉
 
 ``` Swift
 let url = URL(fileURLWithPath: "~/Documents")
-let monitor = DirectoryMonitor(at: url) { 
-  print("Directory did change.") 
+let monitor = DirectoryMonitor(at: url)
+monitor.startMonitoring {
+  print("Directory did change.")
 }
-
-monitor.startMonitoring()
 ```
 
 ## Copyright
