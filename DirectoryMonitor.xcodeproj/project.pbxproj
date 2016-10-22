@@ -221,6 +221,7 @@
 		_ReleaseConf_DirectoryMonitor /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = DirectoryMonitor.xcodeproj/DirectoryMonitor_Info.plist;
@@ -250,6 +251,7 @@
 		"___DebugConf_DirectoryMonitor" /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
 				INFOPLIST_FILE = DirectoryMonitor.xcodeproj/DirectoryMonitor_Info.plist;
