@@ -2,16 +2,9 @@ import XCTest
 @testable import DirectoryMonitor
 
 class DirectoryMonitorTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        XCTAssertEqual(DirectoryMonitor().text, "Hello, World!")
+
+    func testInitializer() {
+        XCTAssertNotNil(DirectoryMonitor(URL: URL(fileURLWithPath: "~")))
     }
 
-
-    static var allTests : [(String, (DirectoryMonitorTests) -> () throws -> Void)] {
-        return [
-            ("testExample", testExample),
-        ]
-    }
 }
