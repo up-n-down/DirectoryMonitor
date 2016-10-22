@@ -1,8 +1,8 @@
 import Foundation
 
-class DirectoryMonitor {
+public class DirectoryMonitor {
 
-    typealias EventHandler = (() -> ())
+    public typealias EventHandler = (() -> ())
 
     // MARK: Properties
 
@@ -23,14 +23,14 @@ class DirectoryMonitor {
 
     // MARK: Initializers
 
-    init(at url: URL, handleWith handler: @escaping EventHandler) {
+    public init(at url: URL, handleWith handler: @escaping EventHandler) {
         self.url = url
         self.workItem = DispatchWorkItem(block: handler)
     }
 
     // MARK: Monitoring
 
-    func startMonitoring() {
+    public func startMonitoring() {
         // Listen for changes to the directory (if we are not already).
         if source == nil && fileDescriptor == -1 {
 
@@ -63,7 +63,7 @@ class DirectoryMonitor {
         }
     }
 
-    func stopMonitoring() {
+    public func stopMonitoring() {
         // Stop listening for changes to the directory, if the source has been created.
         if source != nil {
             // Stop monitoring the directory via the source.
